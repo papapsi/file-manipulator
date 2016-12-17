@@ -1,0 +1,109 @@
+  //File Creator
+        Path path1 = Paths.get("Users/Sai/");
+        Path path2 = FileSystems.getDefault().getPath("/Users/Sai/Documents");
+      // Path path3 = Paths.get(System.getProperty("user.home"));
+        
+        //Retrieving information
+        System.out.println(path1.toString());
+      //  System.out.println(path2.toString());
+        System.out.println(path1.getFileName());
+        System.out.println(path1.getNameCount());
+        System.out.println(path1.getName(1));
+        System.out.println("Parent = "+path1.getParent());
+        System.out.println(path1.getRoot()); // null for relative paths
+        
+        //use .normalize to remove any redundancies ../ ./
+        
+        //Converting a Path
+        //if the path is relative, toUri and toAbsoluePath return the path of the current project
+        
+        //to a String that can be opened from the browser toUri
+        System.out.println(path1.toUri());
+        
+        //to an absolute path
+        System.out.println(path1.toAbsolutePath());
+        
+        //toRealPath
+        // resolves a symbolic link, returns an absolute path is the path is relative, removes redundant elements
+        // need to catch, IOException and NoSuchFileException
+        
+        //joining two paths .resolve("path")
+        //passing an absolute path to resolve() returns the absolute path itself
+        Path p3 = Paths.get("/User/Sai");
+        System.out.println(p3.resolve("Documents"));
+        
+        //Creating a Path between Two Paths
+        //the new path is relative to the original path
+        
+        //With two 'relative' paths
+        Path p4 = Paths.get("James/Ansah/Nti/Mensah");
+        Path p5 = Paths.get("Christy");
+        
+        System.out.println("getNameCount = no of '../' ="+p4.getNameCount());
+        System.out.println(p4.relativize(p5)); 
+        //relative path starts at ../ The number of ../ is equivalent to the result of getNameCount for p4
+        //makes sense because it doesn't know where it starts from
+        
+        //with a variant of 'relative' paths 
+        Path p6 = Paths.get("home");
+        Path p7 = Paths.get("home/sally/bar");
+        System.out.println(p6.relativize(p7));
+        System.out.println(p7.relativize(p6));
+        
+        //Comparing two paths
+        //equals to test two paths for equality ... on Mac case-sensitivity is considered
+        //startsWith and endsWith 
+        //Path implements Iterable so you can use the enhanced for loop construct
+        //It also implements Comparable so you can use the compareTo method
+        //Paths can be put in a Collection as well
+        
+        Path p8 = Paths.get("Users/Sai");
+        Path p9 = Paths.get("Users/Sai");
+        System.out.println(p8.equals(p9));
+        System.out.println(p8.compareTo(p9)); //0 if they are the same
+        
+        //Let's play with files;
+        //The Files class has a lot of STATIC methods for working with files. They work on instances of Path objects
+        //It's important to catch IOExceptions and other exceptions that extend FileSystemException
+        // The FileSystemExcpetions give us useful methods getFile, getReason, getOtherFile
+        
+        
+        //Verifying  existence or not: exist(Path, LinkOptions) and notExists(Path, LinkOptions)
+        //Accessibility isReadable(Path), isWritable(Path), isExecutable(Path);
+        //Checking if two paths locate the same file isSameFile(Path, Path)
+        //Deleting a file or directory: Files.delete(Path) .. catch NoSuchFileException, DirectoryNotEmptyException, IOException
+        // Deleting or Files.deleteIfExists (but this doesn't throw an Exception if the file doesn't exist);
+        //copying a file or directory: copy(Path, Path, CopyOption...) ... directories can be copied but their contents are copied to the destination
+        // copy takes a varargs REPLACE_EXISTING, COPY_ATTRIBUTES, NOFOLLOW_LINKS
+        //moving move(Path, Path, CopyOption...) REPLACE_EXISTING, ATOMIC_MOVE
+        //Metadata - size(Path), isDirectory, isRegularFile, isSymbolicLink, isHidden, get/setLastModifiedTime, get/setOwner,...
+        // go get multiple metadata items in one swoop (more efficient)... readAttributes(Path, String, LinkOption...)
+        
+        //BasicFileAttributes; DOSFileAttributes; POSIXFilePermissions; 
+        Path pathToHR = Paths.get("/Users/Sai/Documents/HR Insight test.pdf");
+        
+        //checking if it exist
+        System.out.println(Files.exists(pathToHR));
+       
+        
+       try{
+               BasicFileAttributes file;
+            file = Files.readAttributes(pathToHR,BasicFileAttributes.class);
+            
+            System.out.println("Here is some information about the file:");
+            System.out.println("Size: "+file.size());
+            System.out.println("Created: "+file.creationTime());
+            System.out.println("Last Access: "+file.lastAccessTime());
+            System.out.println("Last Modified: "+file.lastModifiedTime());
+            System.out.println("Is directory: "+file.isDirectory());
+            System.out.println("Is symbolic link: "+file.isSymbolicLink());
+            System.out.println("Is regular file: "+file.isRegularFile());
+  
+            Date date = new Date();
+            System.out.println(date.toString());
+       
+       }
+       catch(IOException IO)
+       {
+           
+       }
